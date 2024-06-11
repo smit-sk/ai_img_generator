@@ -1,6 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
@@ -8,9 +6,9 @@ import 'package:logoipsum/Controller/home_ctrl.dart';
 import 'package:logoipsum/colors.dart';
 
 class DataObject {
-  late final Uint8List img;
-  late final String selectedStyle;
-  DataObject({required this.img, required this.selectedStyle});
+  late final String img;
+  late final String description;
+  DataObject({required this.img, required this.description});
 }
 
 class AiImageView extends StatelessWidget {
@@ -19,17 +17,17 @@ class AiImageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeCtrl>(builder: (homeCtrl) {
-      return homeCtrl.imgList.isNotEmpty
+      return homeCtrl.imgPNG != null
           ? Expanded(
               child: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/view_image_page',
-                    arguments: DataObject(
-                        img: base64.decode(homeCtrl.imgList[0]['base64']),
-                        selectedStyle: homeCtrl.selectedStyle),
-                  );
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   '/view_image_page',
+                  //   arguments: DataObject(
+                  //       img: homeCtrl.imgPNG!,
+                  //       description: homeCtrl.selectedStyle),
+                  // );
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -40,7 +38,7 @@ class AiImageView extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.memory(
-                      base64.decode(homeCtrl.imgList[0]['base64']),
+                      homeCtrl.imgPNG!,
                       fit: BoxFit.cover,
                     ),
                   ),

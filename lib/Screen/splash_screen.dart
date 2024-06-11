@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:logoipsum/Screen/home_screen.dart';
+import 'package:logoipsum/Screen/dashboard_screen.dart';
 import 'package:logoipsum/colors.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
               GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: ((context) => HomeScreen())));
+                      MaterialPageRoute(builder: ((context) => DashboardScreen())));
                 },
                 child: Image.asset(
                   'images/logo.png',

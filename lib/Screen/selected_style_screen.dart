@@ -55,7 +55,7 @@ class SelectedStyleScreen extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () =>
-                          {ctrl.changeImgeList([]), Navigator.pop(context)},
+                          { Navigator.pop(context)},
                       icon: const Icon(
                         Icons.arrow_back_rounded,
                         color: AppColors.darkpurple,

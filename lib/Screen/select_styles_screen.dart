@@ -69,36 +69,6 @@ class SelectStyleScreen extends StatelessWidget {
                 ],
               ),
             ),
-
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            //   child: Row(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       Text(
-            //         "Select Styles",
-            //         style: GoogleFonts.spaceGrotesk(
-            //             fontSize: 12, fontWeight: FontWeight.w500),
-            //       ),
-            //       InkWell(
-            //         onTap: () {
-            //           // Navigator.pushNamed(
-            //           //   context,
-            //           //   '/select_style',
-            //           // );
-            //         },
-            //         child: Text(
-            //           "See All",
-            //           style: GoogleFonts.spaceGrotesk(
-            //               color: AppColors.purple,
-            //               fontSize: 12,
-            //               fontWeight: FontWeight.w500),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             GetBuilder<HomeCtrl>(builder: (ctrl) {
               return Expanded(
                 child: SingleChildScrollView(
@@ -115,7 +85,7 @@ class SelectStyleScreen extends StatelessWidget {
                       children: List.generate(ctrl.styles.length, (index) {
                         return InkWell(
                           onTap: () {
-                            ctrl.changeImgeList([]);
+                            
                             Navigator.pushNamed(context, '/styled_img_view');
                             ctrl.changeStyle(index);
                           },

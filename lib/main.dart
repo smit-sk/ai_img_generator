@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:logoipsum/Screen/home_screen.dart';
+import 'package:logoipsum/Controller/home_ctrl.dart';
+import 'package:logoipsum/Screen/dashboard_screen.dart';
 import 'package:logoipsum/Screen/view_image_screen.dart';
 import 'package:logoipsum/Screen/select_styles_screen.dart';
 // import 'dart:async';
@@ -9,6 +10,7 @@ import 'package:logoipsum/Screen/selected_style_screen.dart';
 import 'dart:io' show Platform;
 
 void main() {
+  Get.put(HomeCtrl());
   runApp(const MyApp());
 }
 
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
       routes: {
         '/spalsh': (context) => SplashScreen(),
-        '/home': (context) => HomeScreen(),
+        '/home': (context) => DashboardScreen(),
         '/select_style': (context) => SelectStyleScreen(),
         '/styled_img_view': (context) => SelectedStyleScreen(),
         '/view_image_page': (context) => ViewImageScreen()

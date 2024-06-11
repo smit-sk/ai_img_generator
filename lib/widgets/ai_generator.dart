@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logoipsum/Controller/home_ctrl.dart';
@@ -13,7 +15,7 @@ import 'package:logoipsum/widgets/loading_dialog.dart';
 class AiGenerator extends StatelessWidget {
   AiGenerator({super.key});
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final txtCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeCtrl>(builder: (homeCtrl) {
@@ -34,8 +36,11 @@ class AiGenerator extends StatelessWidget {
                 height: 10,
               ),
               TextFormField(
-                controller: txtCtrl,
                 maxLines: 5,
+                initialValue: homeCtrl.searchText.value,
+                onChanged: (text) {
+                  homeCtrl.changeSearchText(text);
+                },
                 style: GoogleFonts.spaceGrotesk(
                     fontSize: 12, fontWeight: FontWeight.w500),
                 decoration: InputDecoration(
@@ -89,7 +94,7 @@ class AiGenerator extends StatelessWidget {
                         return const Loading();
                       },
                     );
-                    await convertTextToImage(homeCtrl, context).then((flag) {
+                    await generateImage(homeCtrl, context).then((flag) {
                       Get.back();
                     });
                   }
@@ -149,6 +154,9 @@ class AiGenerator extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              SizedBox(
+                height: 16,
               )
             ],
           ),
@@ -184,7 +192,7 @@ class AiGenerator extends StatelessWidget {
         'style_preset': ctrl.selectedStyle,
         'text_prompts': [
           {
-            'text': txtCtrl.text.toString(),
+            'text': ctrl.searchText,
             'weight': 1,
           }
         ],
@@ -215,6 +223,65 @@ class AiGenerator extends StatelessWidget {
       );
 
       // return showErrorDialog('Failed to generate image', context);
+    }
+  }
+
+  getUdid() async {
+    String udid = '';
+    try {
+      udid = await FlutterUdid.udid;
+      print("UUID:-" + udid);
+      return udid;
+    } on PlatformException {
+      udid = 'Failed to get UDID';
+      return udid;
+    }
+  }
+
+  Future<dynamic> generateImage(ctrl, context) async {
+    ctrl.changeLoader();
+    final url =
+        Uri.parse('https://techsquare.tech/RbTech/Apps/image/api/code.php');
+
+    final request = await http.post(
+      url,
+      body: {
+        'userId': await getUdid(),
+        'userLocation': "Ashburn : VA",
+        'inputText':
+            "${ctrl.searchText.toString()} in a ${ctrl.selectedStyle} style",
+        'styleId': '',
+        'styleLabel': ctrl.selectedStyle
+      },
+    );
+    print(request.statusCode);
+    if (request.statusCode == 200) {
+      ctrl.changeLoader();
+      ctrl.changePNGImage(request.bodyBytes);
+    } else if (request.statusCode == 400) {
+      ctrl.changeLoader();
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertDialogBox();
+        },
+      );
+    } else if (request.statusCode == 404) {
+      ctrl.changeLoader();
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertDialogBox();
+        },
+      );
+    } else {
+      ctrl.changeLoader();
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertDialogBox();
+        },
+      );
     }
   }
 }
