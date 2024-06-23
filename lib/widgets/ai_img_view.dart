@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:logoipsum/Controller/home_ctrl.dart';

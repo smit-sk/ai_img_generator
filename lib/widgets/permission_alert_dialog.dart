@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logoipsum/colors.dart';
-import 'package:logoipsum/widgets/ai_button.dart';
 
 class PermissionAlertDialog extends StatefulWidget {
   const PermissionAlertDialog({Key? key}) : super(key: key);
@@ -87,9 +86,7 @@ class _PermissionAlertDialogState extends State<PermissionAlertDialog> {
                     height: 10,
                   ),
                   Row(
-                    children: [
-                     
-                    ],
+                    children: [],
                   )
                 ],
               ),
