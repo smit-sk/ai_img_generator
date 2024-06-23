@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logoipsum/Controller/home_ctrl.dart';
@@ -29,13 +31,30 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
-      routes: {
-        '/spalsh': (context) => SplashScreen(),
-        '/home': (context) => DashboardScreen(),
-        '/select_style': (context) => SelectStyleScreen(),
-        '/styled_img_view': (context) => SelectedStyleScreen(),
-        '/view_image_page': (context) => ViewImageScreen()
-      },
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => SplashScreen()),
+        GetPage(
+            name: '/home',
+            page: () => DashboardScreen(),
+            binding: BindingsBuilder(() {
+              Get.find<HomeCtrl>().clearCache();
+            })),
+        GetPage(
+            name: '/select_style',
+            page: () => SelectStyleScreen(),
+            binding: BindingsBuilder(() {})),
+        GetPage(
+            name: '/styled_img_view',
+            page: () => SelectedStyleScreen(),
+            binding: BindingsBuilder(() {
+              Get.find<HomeCtrl>().clearCache();
+            })),
+        GetPage(
+            name: '/view_image_page',
+            page: () => ViewImageScreen(),
+            binding: BindingsBuilder(() {})),
+      ],
     );
   }
 }

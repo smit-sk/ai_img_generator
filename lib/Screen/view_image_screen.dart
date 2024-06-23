@@ -1,13 +1,15 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last, prefer_interpolation_to_compose_strings, avoid_print, unnecessary_null_comparison, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, prefer_interpolation_to_compose_strings, avoid_print, unnecessary_null_comparison, use_build_context_synchronously, unused_local_variable
 
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:logoipsum/widgets/alert_dialog.dart';
 import 'package:logoipsum/widgets/loading_bottomsheet.dart';
 import 'package:logoipsum/colors.dart';
 import 'package:logoipsum/widgets/ai_img_view.dart';
@@ -103,12 +105,16 @@ class ViewImageScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          args.img,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          borderRadius: BorderRadius.circular(10),
+                          child: args.imgType == 'network'
+                              ? Image.network(
+                                  args.img,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.memory(
+                                  args.img,
+                                  fit: BoxFit.cover,
+                                )),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 5, top: 16),
                         child: Text(
@@ -130,70 +136,6 @@ class ViewImageScreen extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(bottom: 10, top: 12),
-                      //   child: Text(
-                      //     "Style",
-                      //     textAlign: TextAlign.start,
-                      //     style: GoogleFonts.spaceGrotesk(
-                      //       color: AppColors.darkpurple.withOpacity(0.6),
-                      //       fontSize: 12,
-                      //       fontWeight: FontWeight.w700,
-                      //     ),
-                      //   ),
-                      // ),
-                      // Container(
-                      //   padding: EdgeInsets.all(5),
-                      //   decoration: BoxDecoration(
-                      //       border: Border.all(
-                      //           color: AppColors.white.withOpacity(0.5),
-                      //           width: 0.7),
-                      //       borderRadius: BorderRadius.all(Radius.circular(16)),
-                      //       color: AppColors.peach.withOpacity(0.5)),
-                      //   child: Row(
-                      //     children: [
-                      //       ClipRRect(
-                      //         borderRadius: BorderRadius.circular(14),
-                      //         child: Image.asset(
-                      //           "images/anime.png",
-                      //           fit: BoxFit.cover,
-                      //           height: 40,
-                      //           width: 40,
-                      //         ),
-                      //       ),
-                      //       const SizedBox(
-                      //         width: 10,
-                      //       ),
-                      //       Text(
-                      //         args.description,
-                      //         style: GoogleFonts.spaceGrotesk(
-                      //           color: AppColors.darkFont,
-                      //           fontSize: 12,
-                      //           fontWeight: FontWeight.w700,
-                      //         ),
-                      //       ),
-                      //       const Spacer(),
-                      //       Container(
-                      //         height: 40,
-                      //         width: 40,
-                      //         child: Center(
-                      //             child: Image.asset(
-                      //           "images/star.png",
-                      //           height: 20,
-                      //           width: 20,
-                      //         )),
-                      //         decoration: BoxDecoration(
-                      //           shape: BoxShape.circle,
-                      //           image: DecorationImage(
-                      //             image: AssetImage("images/bgimg.png"),
-                      //             fit: BoxFit.cover,
-                      //           ),
-                      //         ),
-                      //       )
-                      //     ],
-                      //   ),
-                      // ),
-
                       const SizedBox(
                         height: 16,
                       ),
@@ -215,13 +157,19 @@ class ViewImageScreen extends StatelessWidget {
                                       directory =
                                           await getApplicationDocumentsDirectory();
                                     }
-
-                                    // File file = await saveUint8ListToFile(
-                                    //     args.img,
-                                    //     "${directory!.path}/ai_image.jpg");
-                                    // print("FILE:= " + file.path);
-                                    // XFile f = XFile(file.path);
-                                    // Share.shareXFiles([f]);
+                                    if (args.imgType != 'network') {
+                                      File file = await saveUint8ListToFile(
+                                          args.img,
+                                          "${directory!.path}/ai_image.jpg");
+                                      print("FILE:= " + file.path);
+                                      XFile f = XFile(file.path);
+                                      Share.shareXFiles([f]);
+                                    } else {
+                                      final file = await DefaultCacheManager()
+                                          .getSingleFile(args.img);
+                                      XFile f = XFile(file.path);
+                                      Share.shareXFiles([f]);
+                                    }
                                   })),
                           const SizedBox(
                             width: 10,
@@ -244,14 +192,36 @@ class ViewImageScreen extends StatelessWidget {
                                         builder: (BuildContext context) {
                                           return LoadingBottomSheet();
                                         });
-                                    await _downloadImage(args.img)
-                                        .then((value) async {
-                                      if (value) {
-                                        await Future.delayed(
-                                            Duration(seconds: 1));
-                                        Get.back();
-                                      }
-                                    });
+                                    if (args.imgType == 'network') {
+                                      print("Network! Image is being Download");
+                                      await _downloadImage(args.img, context)
+                                          .then((value) async {
+                                        if (value) {
+                                          await Future.delayed(
+                                              Duration(seconds: 1));
+                                          Get.back();
+                                        }
+                                      });
+                                    } else {
+                                      print(
+                                          "BodyBytes Image is being Download");
+                                      await saveFile(args.img)
+                                          .then((value) async {
+                                        if (value == true) {
+                                          await Future.delayed(
+                                              Duration(seconds: 1));
+                                          Get.back();
+                                        } else {
+                                          Get.back();
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const AlertDialogBox();
+                                            },
+                                          );
+                                        }
+                                      });
+                                    }
                                   })),
                         ],
                       ),
@@ -266,11 +236,12 @@ class ViewImageScreen extends StatelessWidget {
     );
   }
 
-  Future<bool> _downloadImage(String url) async {
+  Future<bool> _downloadImage(String url, context) async {
     try {
-      // Request storage permission
-      var status = await Permission.storage.request();
-      if (status.isGranted) {
+      var status = Platform.isIOS
+          ? Permission.storage.request()
+          : Permission.manageExternalStorage.request();
+      if (await status.isGranted) {
         // Download the image
         final response = await http.get(Uri.parse(url));
         if (response.statusCode == 200) {
@@ -286,7 +257,7 @@ class ViewImageScreen extends StatelessWidget {
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.BOTTOM,
                 timeInSecForIosWeb: 1,
-                backgroundColor: AppColors.purple.withOpacity(.30),
+                backgroundColor: AppColors.pinkLight,
                 textColor: AppColors.darkFont,
                 fontSize: 16.0);
             return true;
@@ -300,7 +271,12 @@ class ViewImageScreen extends StatelessWidget {
           return false;
         }
       } else {
-        print('Storage permission denied');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertDialogBox();
+          },
+        );
         return false;
       }
     } catch (e) {
@@ -316,26 +292,39 @@ class ViewImageScreen extends StatelessWidget {
   }
 
   Future<bool?> saveFile(imgbytes) async {
-    if (Platform.isAndroid) {
-      // Request storage permission if not granted
-      var status = await Permission.storage.status;
-      if (status != PermissionStatus.granted) {
-        status = await Permission.storage.request();
-        if (status != PermissionStatus.granted) {
-          // Handle permission denied
-          print('Permission denied');
-          return null;
+    try {
+      var status = Platform.isIOS
+          ? Permission.storage.request()
+          : Permission.manageExternalStorage.request();
+
+      if (await status.isGranted) {
+        final result = await SaverGallery.saveImage(
+          imgbytes,
+          quality: 60,
+          name: "test_ai.jpg",
+          androidRelativePath: "Pictures/appName/xx",
+          androidExistNotSave: false,
+        );
+        if (result.isSuccess) {
+          Fluttertoast.showToast(
+              msg: "Image saved to gallery",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: AppColors.pinkLight,
+              textColor: AppColors.darkFont,
+              fontSize: 16.0);
+          print(result.toString());
+          return true;
+        } else {
+          return false;
         }
+      } else {
+        return false;
       }
+    } catch (e) {
+      print('Error downloading image: $e');
+      return false;
     }
-    final result = await SaverGallery.saveImage(
-      imgbytes,
-      quality: 60,
-      name: "test_ai.jpg",
-      androidRelativePath: "Pictures/appName/xx",
-      androidExistNotSave: false,
-    );
-    print(result.toString());
-    return true;
   }
 }

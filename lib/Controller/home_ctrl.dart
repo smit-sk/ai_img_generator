@@ -16,7 +16,7 @@ class HomeCtrl extends GetxController {
 
   List exploreImgList = [];
 
-  var cIndex = 0.obs;
+  var cIndex = 2.obs;
   var searchText = "".obs;
 
   String selectedStyle = "3d-model";
@@ -48,6 +48,11 @@ class HomeCtrl extends GetxController {
     searchText.value = value;
   }
 
+  void clearCache() {
+    searchText.value = "";
+    imgPNG = null;
+  }
+
   void changeTabIndex(int value) {
     cIndex(value);
   }
@@ -62,8 +67,8 @@ class HomeCtrl extends GetxController {
     update();
   }
 
-  void changePNGImage(value) {
-    imgPNG = Uint8List.fromList(value);
+  void changePNGImage(Uint8List? imageBytes) {
+    imgPNG = imageBytes;
     update();
 
     print("Image Changed" + imgPNG!.length.toString());

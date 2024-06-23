@@ -17,7 +17,6 @@ class ExploreScreen extends StatelessWidget {
     return GetBuilder<HomeCtrl>(builder: (homeCtrl) {
       return Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -64,6 +63,7 @@ class ExploreScreen extends StatelessWidget {
 
             Expanded(
               child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: MasonryView(
                   listOfItem: homeCtrl.exploreImgList,
                   numberOfColumn: 2,
@@ -75,8 +75,9 @@ class ExploreScreen extends StatelessWidget {
                             context,
                             '/view_image_page',
                             arguments: DataObject(
-                                img: item['image'],
-                                description: item['prompt']),
+                                img: item['image'].toString(),
+                                description: item['prompt'],
+                                imgType: 'network'),
                           );
                         },
                         child: Image.network(item['image']));
@@ -84,9 +85,6 @@ class ExploreScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            )
           ],
         ),
       );

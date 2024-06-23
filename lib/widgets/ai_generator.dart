@@ -1,6 +1,4 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:convert';
+// ignore_for_file: prefer_const_constructors, prefer_const_declarations
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
@@ -8,9 +6,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logoipsum/Controller/home_ctrl.dart';
 import 'package:logoipsum/colors.dart';
-import 'package:http/http.dart' as http;
 import 'package:logoipsum/widgets/alert_dialog.dart';
 import 'package:logoipsum/widgets/loading_dialog.dart';
+import 'package:http/http.dart' as http;
 
 class AiGenerator extends StatelessWidget {
   AiGenerator({super.key});
@@ -165,66 +163,62 @@ class AiGenerator extends StatelessWidget {
     });
   }
 
-  Future<dynamic> convertTextToImage(ctrl, context) async {
-    ctrl.changeLoader();
-
-    const baseUrl = 'https://api.stability.ai';
-    final url = Uri.parse(
-        '$baseUrl/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image');
-
-    // Make the HTTP POST request to the Stability Platform API
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization':
-            'Bearer sk-jwGlre8a6oxZhl5BbF0pwZb2X9k5G4wJq4J5hQhhTU2af6x1',
-        'Accept': 'application/json',
-      },
-      body: jsonEncode({
-        'cfg_scale': 15,
-        'clip_guidance_preset': 'FAST_BLUE',
-        'height': 1024,
-        'width': 1024,
-        'samples': 1,
-        'steps': 15,
-        'seed': 0,
-        'style_preset': ctrl.selectedStyle,
-        'text_prompts': [
-          {
-            'text': ctrl.searchText,
-            'weight': 1,
-          }
-        ],
-      }),
-    );
-    print(response.body);
-    if (response.statusCode == 200) {
-      try {
-        var res = json.decode(response.body);
-        ctrl.changeLoader();
-        ctrl.changeImgeList(res['artifacts']);
-      } on Exception {
-        ctrl.changeLoader();
-        // return showErrorDialog('Failed to generate image exception', context);
-      }
-    } else {
-//       {
-//     "id": "0484d01c7c44feeb7c805d01d0e3ea76",
-//     "message": "text_prompts: (0: (text: cannot be blank.).).",
-//     "name": "bad_request"
-// }
-
-      return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return const AlertDialogBox();
-        },
-      );
-
-      // return showErrorDialog('Failed to generate image', context);
-    }
-  }
+//   Future<dynamic> convertTextToImage(ctrl, context) async {
+//     ctrl.changeLoader();
+//     const baseUrl = 'https://api.stability.ai';
+//     final url = Uri.parse(
+//         '$baseUrl/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image');
+//     // Make the HTTP POST request to the Stability Platform API
+//     final response = await http.post(
+//       url,
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization':
+//             'Bearer sk-jwGlre8a6oxZhl5BbF0pwZb2X9k5G4wJq4J5hQhhTU2af6x1',
+//         'Accept': 'application/json',
+//       },
+//       body: jsonEncode({
+//         'cfg_scale': 15,
+//         'clip_guidance_preset': 'FAST_BLUE',
+//         'height': 1024,
+//         'width': 1024,
+//         'samples': 1,
+//         'steps': 15,
+//         'seed': 0,
+//         'style_preset': ctrl.selectedStyle,
+//         'text_prompts': [
+//           {
+//             'text': ctrl.searchText,
+//             'weight': 1,
+//           }
+//         ],
+//       }),
+//     );
+//     print(response.body);
+//     if (response.statusCode == 200) {
+//       try {
+//         var res = json.decode(response.body);
+//         ctrl.changeLoader();
+//         ctrl.changeImgeList(res['artifacts']);
+//       } on Exception {
+//         ctrl.changeLoader();
+//         // return showErrorDialog('Failed to generate image exception', context);
+//       }
+//     } else {
+// //       {
+// //     "id": "0484d01c7c44feeb7c805d01d0e3ea76",
+// //     "message": "text_prompts: (0: (text: cannot be blank.).).",
+// //     "name": "bad_request"
+// // }
+//       return showDialog(
+//         context: context,
+//         builder: (BuildContext context) {
+//           return const AlertDialogBox();
+//         },
+//       );
+//       // return showErrorDialog('Failed to generate image', context);
+//     }
+//   }
 
   getUdid() async {
     String udid = '';
@@ -238,7 +232,7 @@ class AiGenerator extends StatelessWidget {
     }
   }
 
-  Future<dynamic> generateImage(ctrl, context) async {
+  Future<dynamic> generateImage(HomeCtrl ctrl, context) async {
     ctrl.changeLoader();
     final url =
         Uri.parse('https://techsquare.tech/RbTech/Apps/image/api/code.php');

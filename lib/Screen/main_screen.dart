@@ -5,7 +5,6 @@ import 'package:logoipsum/colors.dart';
 import 'package:logoipsum/main.dart';
 import 'package:logoipsum/widgets/ai_generator.dart';
 import 'package:logoipsum/widgets/ai_img_view.dart';
-
 import '../Controller/home_ctrl.dart';
 
 class MainScreen extends StatelessWidget {
@@ -33,8 +32,8 @@ class MainScreen extends StatelessWidget {
             Container(
               padding: EdgeInsets.fromLTRB(16, 18, 16, 14),
               margin: isPlatformiOS
-                  ? EdgeInsets.only(top: 40)
-                  : EdgeInsets.only(top: 25),
+                  ? const EdgeInsets.only(top: 40)
+                  : const EdgeInsets.only(top: 25),
               decoration: const BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.only(
@@ -72,13 +71,14 @@ class MainScreen extends StatelessWidget {
                 ? Expanded(
                     child: InkWell(
                       onTap: () {
-                        // Navigator.pushNamed(
-                        //   context,
-                        //   '/view_image_page',
-                        //   arguments: DataObject(
-                        //       img: homeCtrl.imgPNG!,
-                        //       description: homeCtrl.selectedStyle),
-                        // );
+                        Navigator.pushNamed(
+                          context,
+                          '/view_image_page',
+                          arguments: DataObject(
+                              img: homeCtrl.imgPNG,
+                              description: homeCtrl.searchText.value,
+                              imgType: 'bodybytes'),
+                        );
                       },
                       child: Container(
                         margin:
@@ -105,32 +105,36 @@ class MainScreen extends StatelessWidget {
                   ),
 
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Select Styles",
-                        style: GoogleFonts.spaceGrotesk(
-                            fontSize: 12, fontWeight: FontWeight.w500),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/select_style');
-                        },
-                        child: Text(
-                          "See All",
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // const SizedBox(width: 10),
+                        Text(
+                          "Select Styles",
                           style: GoogleFonts.spaceGrotesk(
-                              color: AppColors.purple,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
+                              fontSize: 12, fontWeight: FontWeight.w500),
                         ),
-                      ),
-                    ],
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/select_style');
+                          },
+                          child: Text(
+                            "See All",
+                            style: GoogleFonts.spaceGrotesk(
+                                color: AppColors.purple,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        // const SizedBox(width: 10),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 74,
@@ -144,9 +148,10 @@ class MainScreen extends StatelessWidget {
                               homeCtrl.changeStyle(index);
                             },
                             child: Container(
-                                margin: EdgeInsets.symmetric(
+                                margin: const EdgeInsets.symmetric(
                                     horizontal: 4, vertical: 12),
-                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
                                   boxShadow: [

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logoipsum/colors.dart';
+import 'package:logoipsum/widgets/ai_button.dart';
 
-class AlertDialogBox extends StatefulWidget {
-  const AlertDialogBox({Key? key}) : super(key: key);
+class PermissionAlertDialog extends StatefulWidget {
+  const PermissionAlertDialog({Key? key}) : super(key: key);
 
   @override
-  State<AlertDialogBox> createState() => _AlertDialogBoxState();
+  State<PermissionAlertDialog> createState() => _PermissionAlertDialogState();
 }
 
-class _AlertDialogBoxState extends State<AlertDialogBox> {
+class _PermissionAlertDialogState extends State<PermissionAlertDialog> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
@@ -25,7 +24,7 @@ class _AlertDialogBoxState extends State<AlertDialogBox> {
         backgroundColor: Colors.transparent,
         child: Center(
           child: Container(
-            height: 330,
+            height: 320,
             width: 250,
             decoration: BoxDecoration(
               color: AppColors.white,
@@ -66,7 +65,7 @@ class _AlertDialogBoxState extends State<AlertDialogBox> {
                     height: 20,
                   ),
                   Text(
-                    "Server Error",
+                    "Permission not granted",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.spaceGrotesk(
                         fontSize: 18,
@@ -77,7 +76,7 @@ class _AlertDialogBoxState extends State<AlertDialogBox> {
                     height: 5,
                   ),
                   Text(
-                    "Please try again",
+                    "To allow the storage permission click on allow and grant permisson from device setting",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.spaceGrotesk(
                         fontSize: 16,
@@ -85,38 +84,13 @@ class _AlertDialogBoxState extends State<AlertDialogBox> {
                         fontWeight: FontWeight.w400),
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 10,
                   ),
-                  InkWell(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Container(
-                      height: 40,
-                      margin: const EdgeInsets.symmetric(horizontal: 30),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.darkFont.withOpacity(0.2),
-                            offset: const Offset(0.5, 2),
-                            blurRadius: 0.1,
-                          ),
-                        ],
-                        color: AppColors.purple.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "OK",
-                          style: GoogleFonts.spaceGrotesk(
-                            color: AppColors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  Row(
+                    children: [
+                     
+                    ],
+                  )
                 ],
               ),
             ),

@@ -6,9 +6,11 @@ import 'package:logoipsum/Controller/home_ctrl.dart';
 import 'package:logoipsum/colors.dart';
 
 class DataObject {
-  late final String img;
+  late var img;
   late final String description;
-  DataObject({required this.img, required this.description});
+  late final String imgType;
+  DataObject(
+      {required this.img, required this.description, required this.imgType});
 }
 
 class AiImageView extends StatelessWidget {
@@ -21,13 +23,14 @@ class AiImageView extends StatelessWidget {
           ? Expanded(
               child: InkWell(
                 onTap: () {
-                  // Navigator.pushNamed(
-                  //   context,
-                  //   '/view_image_page',
-                  //   arguments: DataObject(
-                  //       img: homeCtrl.imgPNG!,
-                  //       description: homeCtrl.selectedStyle),
-                  // );
+                  Navigator.pushNamed(
+                    context,
+                    '/view_image_page',
+                    arguments: DataObject(
+                        img: homeCtrl.imgPNG,
+                        description: homeCtrl.searchText.value,
+                        imgType: 'bodybytes'),
+                  );
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),

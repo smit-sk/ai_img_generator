@@ -26,7 +26,7 @@ class SettingScreen extends StatelessWidget {
               stops: [
                 0.0,
                 0.5,
-                0.9,
+                0.9
               ]),
         ),
         child: Column(
@@ -122,7 +122,7 @@ class SettingItem extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.white, width: 1),
-          color: AppColors.pinkLight, // Background color of the container
+          color: AppColors.pinkLight, 
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
